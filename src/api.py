@@ -1,13 +1,14 @@
 import requests
+import configparser
+
+config = configparser.ConfigParser()
+config.read('config.ini')
 
 
 class HeadHunter:
-    api = 'https://api.hh.ru/vacancies'
-    employers = ('1740', '78638',
-                 '3009025', '1868342',
-                 '652744', '9739229',
-                 '5714322', '9632510',
-                 '9288781', '23040')
+    api = config.get('API', 'api_url')
+    employers = config.get('EMPLOYERS', 'employer_ids').split(',')
+
 
     @classmethod
     def get_vacancies(cls):
