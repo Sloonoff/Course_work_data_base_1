@@ -1,14 +1,25 @@
 import psycopg2
 from decimal import Decimal
+import configparser
+
 
 
 class DBManager:
 
+    def __init__(self, config_file):
+        self.config = configparser.ConfigParser()
+        self.config.read(config_file)
+
     @classmethod
     def get_connection(cls):
-        connection = psycopg2.connect(host='localhost', database='CW_DB', user='postgres', password='Nodar126')
+        host = self.config.get('DATABASE', 'host')
+        database = self.config.get('DATABASE', 'database')
+        user = self.config.get('DATABASE', 'user')
+        password = self.config.get('DATABASE', 'password')
+        connection = psycopg2.connect(host=host, database=database, user=user, password=password)
         cur = connection.cursor()
         return connection, cur
+
 
     @classmethod
     def create_tables(cls, cur):
